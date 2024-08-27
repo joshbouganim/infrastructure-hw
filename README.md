@@ -5,7 +5,7 @@ This repository contains a real-time message broadcasting service built with Fas
 
 **Hello Receiver**: A service that receives and displays these messages in real-time through a web interface.
 
-This is based off of the [Machine Infrastructure HW](./assignment.md)
+This is based off of the [Machine Infrastructure HW](./assignment.md). This was built on Windows using WSL Ubuntu 22.04.
 
 ## Prerequisites
 Before running this service, ensure that you have the following installed:
