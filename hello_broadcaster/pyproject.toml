@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "infrastructure-hw"
+name = "hello-broadcaster"
 version = "0.1.0"
 description = ""
 authors = ["Josh Bouganim <joshbouganim@gmail.com>"]

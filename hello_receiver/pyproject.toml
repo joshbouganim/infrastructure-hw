@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "hello-receiver"
+version = "0.1.0"
+description = ""
+authors = ["Josh Bouganim <joshbouganim@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+uvicorn = "^0.30.6"
+fastapi = "^0.112.2"
+requests = "^2.32.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
