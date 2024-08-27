@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-receiver
+  labels:
+    app: hello-receiver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-receiver
+  template:
+    metadata:
+      labels:
+        app: hello-receiver
+    spec:
+      containers:
+      - name: hello-receiver
+        image: hello-receiver:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8001
+        env:
+        - name: BROADCASTER_URL
+          value: "http://hello-broadcaster-service:8000"
+        

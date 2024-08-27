@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-broadcaster
+  labels:
+    app: hello-broadcaster
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-broadcaster
+  template:
+    metadata:
+      labels:
+        app: hello-broadcaster
+    spec:
+      containers:
+      - name: hello-broadcaster
+        image: hello-broadcaster:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 8000
+        

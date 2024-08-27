@@ -29,7 +29,8 @@ async def startup_event():
 
 @app.get("/")
 async def root():
-    return {"status": "Broadcasting", "subscribers": connected_clients}
+    client_ips = [client.client.host for client in connected_clients]
+    return {"status": "Broadcasting", "subscribers": client_ips}
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
