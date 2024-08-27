@@ -2,22 +2,26 @@ import asyncio
 import random
 from typing import List
 import requests
-from fastapi import FastAPI, Body
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 import datetime
 
 app = FastAPI()
 
-registered_receivers: List[str] = []
+connected_clients: List[WebSocket] = []
 
 async def broadcast_message():
     while True:
         await asyncio.sleep(random.randint(1, 10))
-        print(f"{datetime.datetime.now().time()} -- Sending broadcasts to {len(registered_receivers)} receivers")
-        for receiver in registered_receivers:
+        time_now = datetime.datetime.now().time()
+        message = f"{time_now} Hello world"
+        print(f"{time_now} -- Sending broadcasts to {len(connected_clients)} receivers")
+        
+        # Send the message to all connected WebSocket clients
+        for client in connected_clients:
             try:
-                requests.post(f"{receiver}/receive", json={"message": "Hello world"})
+                await client.send_text(message)
             except Exception as e:
-                print(f"Failed to send broadcast to {receiver}: {e}")
+                print(f"Failed to send message to WebSocket client: {e}")
 
 @app.on_event("startup")
 async def startup_event():
@@ -25,11 +29,14 @@ async def startup_event():
 
 @app.get("/")
 async def root():
-    return {"status": "Broadcasting", "subscribers": registered_receivers}
+    return {"status": "Broadcasting", "subscribers": connected_clients}
 
-@app.post("/register")
-async def register_receiver(receiver_url: str = Body(..., embed=True)):
-    if receiver_url not in registered_receivers:
-        registered_receivers.append(receiver_url)
-        return {"status": "Registered", "receiver_url": receiver_url}
-    return {"status": "Already registered", "receiver_url": receiver_url}
+@app.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    connected_clients.append(websocket)
+    try:
+        while True:
+            await websocket.receive_text()  # Keep the connection open
+    except WebSocketDisconnect:
+        connected_clients.remove(websocket)

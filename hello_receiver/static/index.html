@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Messages</title>
+</head>
+<body>
+    <h1>Real-Time Message Receiver</h1>
+
+    <button id="registerButton">Register to Receive Messages</button>
+    <button id="disconnectButton" disabled>Disconnect</button>
+
+    <h2>Received Messages</h2>
+    <ul id="messages"></ul>
+    <p id="errors"></p>
+    <script>
+        let ws;
+
+        document.getElementById('registerButton').onclick = function() {
+            // Disable the button after registering
+            this.disabled = true;
+
+            // Establish the WebSocket connection
+            ws = new WebSocket("ws://localhost:8000/ws");
+
+            ws.onmessage = function(event) {
+                const messagesList = document.getElementById('messages');
+                const newMessage = document.createElement('li');
+                newMessage.textContent = event.data;
+                messagesList.prepend(newMessage);
+            };
+
+            ws.onclose = function(event) {
+                console.log('WebSocket connection closed:', event);
+                document.getElementById('registerButton').disabled = false;
+            };
+
+            ws.onerror = function(error) {
+                const errorList = document.getElementById('messages');
+                const newMessage = document.createElement('li');
+                newMessage.textContent = "Error Connecting. Check log for details";
+                errorList.prepend(newMessage)
+
+                console.log('WebSocket error:', error);
+                document.getElementById('registerButton').disabled = false;
+            };
+
+            document.getElementById('disconnectButton').disabled = false;
+        };
+
+        document.getElementById('disconnectButton').onclick = function() {
+            if (ws) {
+                ws.close();
+                document.getElementById('registerButton').disabled = false;
+                document.getElementById('disconnectButton').disabled = true;
+            }
+        };
+    </script>
+</body>
+</html>
