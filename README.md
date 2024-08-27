@@ -1,24 +1,38 @@
-# infrastructure-hw
+# Real-Time Message Broadcasting Service
+This repository contains a real-time message broadcasting service built with FastAPI and WebSockets, designed to run on a Kubernetes cluster managed by Minikube. The service consists of two main components:
 
-## Your mission
+**Hello Broadcaster**: A service that broadcasts "Hello world" messages to connected WebSocket clients at random intervals.
 
-For this assignment, you're going to create the infrastructure for an application with a small set of services.
+**Hello Receiver**: A service that receives and displays these messages in real-time through a web interface.
 
-- One service needs to broadcast `Hello world` at random intervals. Make the interval anywhere from 1 to 10 seconds, with each the time until the next broadcast each chosen randomly.
+This is based off of the [Machine Infrastructure HW](./assignment.md)
 
-- Another service needs to receive the `Hello world` broadcasts.
+## Prerequisites
+Before running this service, ensure that you have the following installed:
 
-- Then a user should be able to view the `Hello world` broadcasts, as they arrive, from a web browser.
+* [Docker](https://docs.docker.com/get-started/get-docker/): Used for building and running containers.
+* [Minikube](https://minikube.sigs.k8s.io/docs/start/): A tool that sets up a local Kubernetes cluster.
+* [kubectl](https://kubernetes.io/docs/tasks/tools/): The command-line tool for interacting with Kubernetes clusters.
 
-### Other requirements
+## Installation and Setup
 
-- Use whatever languages and frameworks you want to create the services.
-- We're aiming to just run this application on an engineer's local machine, not the cloud; design your solution for `minikube`
-- Your solution should have the minimum number of manual setup steps necessary.
-- Use any adjacent infrastructure tools you think make for a more elegant solution.
+Execute the provided `run.sh` script to build the Docker images, deploy the services to Minikube, and forward the necessary ports:
 
-## Submission
+```bash
+./run.sh
+```
+## Access the Services: 
+After the script completes, you can access the services at the following URLs:
 
-- Fork this repository on GitHub. Develop a solution on your fork. Extra points for good git hygiene.
-- Include specific instructions in your README about pre-requisites and setup steps. Another engineer should be able to go from zero to running your solution on their local machine.
-- Either send us the link to your repository (if you make it public) or email us a zipped-up folder.
+Hello Broadcaster (to view subscribed clients): http://localhost:8000
+
+Hello Receiver (Click "Register" to start receiving messages ): http://localhost:8001
+
+
+
+
+## To-Do List
+* Use Helm Charts: Transition to using Helm charts for managing Kubernetes deployments more efficiently.
+* Use Kafka for Pub/Sub: Implement Kafka as the pub/sub mechanism to enhance the scalability and reliability of message broadcasting.
+* Testing!!: Introduce unit tests, integration tests, and end-to-end tests to ensure the robustness and reliability of the services.
+* Error Handling: Introduce proper error and edge case handling to increase stability
