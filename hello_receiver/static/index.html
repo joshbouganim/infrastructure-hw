@@ -8,10 +8,6 @@
 <body>
     <h1>Real-Time Message Receiver</h1>
 
-    <!-- Input field for WebSocket URL -->
-    <label for="wsUrl">WebSocket URL:</label>
-    <input type="text" id="wsHostPort">
-    
     <button id="registerButton">Register to Receive Messages</button>
     <button id="disconnectButton" disabled>Disconnect</button>
 
@@ -24,13 +20,10 @@
         document.getElementById('registerButton').onclick = function() {
             // Disable the button after registering
             this.disabled = true;
-
-            // Get the host and port from the input field and construct the WebSocket URL
-            const wsHostPort = document.getElementById('wsHostPort').value;
-            const wsUrl = `ws://${wsHostPort}/ws`;
+            document.getElementById('disconnectButton').disabled = false;
 
             // Establish the WebSocket connection
-            ws = new WebSocket(wsUrl);
+            ws = new WebSocket("ws://localhost:8000/ws");
 
             ws.onmessage = function(event) {
                 const messagesList = document.getElementById('messages');
@@ -53,8 +46,6 @@
                 console.log('WebSocket error:', error);
                 document.getElementById('registerButton').disabled = false;
             };
-
-            document.getElementById('disconnectButton').disabled = false;
         };
 
         document.getElementById('disconnectButton').onclick = function() {
